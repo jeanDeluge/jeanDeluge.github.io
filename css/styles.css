@@ -1,0 +1,42 @@
+@charset "euc-kr";
+*{
+  box-sizing: border-box;
+}
+#navigation>div{
+  padding:0;
+  position: fixed;
+  width: 100%;
+  background-color: rgba(255, 255, 255,0.5)
+}
+#navigation>div >ul>li{
+  display: inline-block;
+}
+section {
+
+  background-color:white;
+  text-align: center;
+}
+.title{
+  padding:10px;
+  font-size: 30px;
+  color: rgb(99, 219, 203);
+  border-bottom: 3px;
+  border-bottom-style: solid;
+  border-image:radial-gradient(rgb(99, 219, 203), rgba(41, 164, 236, 0.012)) 1;
+}
+#homeTitle{
+  display: flex;
+  width: 80%;
+  height : 400px;
+  vertical-align: middle;
+}
+#greeting{
+  top: 50%;
+  left: 50%;
+}
+#SKILLS>.context>ul{
+  text-align: center;
+}
+#SKILLS>.context>ul>li{
+  display: inline-block;
+}
