@@ -1,4 +1,4 @@
-# 오픈주소법으로 해싱
+# 체인법 - 오픈해시법
 from typing import Any
 import hashlib
 
