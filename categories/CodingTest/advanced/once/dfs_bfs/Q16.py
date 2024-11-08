@@ -1,38 +1,67 @@
-# 바이러스가 움직이는 것을 기준으로
-# 만약 바이러스 상하좌우에서 0 인 걸 발견하면 벽을 세워보고 만약 그 벽의 총 개수가 3을 넘어가면
-# 바이러스를 움직이고
-# 총 개수가 3이하면 벽을 0에서 1로 만들어본다.
-from collections import deque
-n, m = map(int, input().split())
-graph = []
-dx = [ 0, 0, -1, 1]
-dy = [ 1, -1, 0, 0]
+example_1 = [[7, 7] , ["2 0 0 0 1 1 0", "0 0 1 0 1 2 0", "0 1 1 0 1 0 0", "0 1 0 0 0 0 0", "0 0 0 0 0 1 1", "0 1 0 0 0 0 0", "0 1 0 0 0 0 0"], ]
+example_2 = [[4, 6], [ " 0 0 0 0 0 0", "1 0 0 0 0 2", "1 1 1 0 0 2", "0 0 0 0 0 2"]]
+# 바이러스가 퍼지도록 하고,
+# 벽을 두면서 탐색
+# 벽을 설치하는 dfs
+# 벽을 설치를 다 했으면
+# 바이러스는 있는 기준으로 모두 퍼져나가고
+# 벽을 고정시키고
+# 남은 0을 갯수 탐색
 
-for _ in range(m):
-    given_row = list(map(int, input().split()))
-    graph.append(given_row)
+# 벽을 설치를 다 못했으면
+# 미리 한번 1개 설치해보고
+# 그 다음에서 다음 상황을 한번 보고
+# 다시 벽을 철거한다.
+def solution(example):
+    n, m = example[0]
+    graph = [ list(map(int, i.split())) for i in example[1] ]
+    temp = [[0] * m for _ in range(n)]
 
-queue = deque((0,0))
-
-wall = 3
-while queue:
-    now = queue.popleft()
-    used_wall = 0
+    result = 0 
     
-    if graph[now] == 2:
+    def virus(x,y):
+        dx = [0, 0, -1, 1]
+        dy = [1, -1, 0, 0]
         for i in range(4):
-            nx = now[0] + dx[i]
-            ny = now[1] + dy[i]
-            if nx < 0 or nx> n or ny < 0 or ny > 0 or map[nx][ny] == 1 or map[nx][ny]==2:
-                continue
-            else: 
-                map[nx][ny] = 1
-                used_wall += 1
-                
-        if used_wall > wall:
-            graph.append((nx, ny))
+            nx = x + dx[i]
+            ny = y + dy[i]
             
-            
-                    
-                
+            if nx >= 0 and nx < n and ny>= 0 and ny < m:
+                if temp[nx][ny] == 0:
+                    temp[nx][ny] = 2
+                    virus(nx, ny)
+                       
+    def get_safe_area():
+        area = 0
+        for i in range(n):
+            for j in range(m):
+                if temp[i][j] == 0:
+                    area += 1
+        return area    
     
+    def dfs(count):
+        nonlocal result
+        if count == 3:
+            for i in range(n):
+                for j in range(m):
+                    temp[i][j] = graph[i][j]
+                
+            for i in range(n):
+                for j in range(m):
+                    if temp[i][j] == 2:
+                        virus(i, j)
+            result = max(result, get_safe_area())
+            return
+
+        for i in range(n):
+            for j in range(m):
+                if graph[i][j] == 0:
+                    graph[i][j] = 1
+                    count += 1
+                    dfs(count)
+                    graph[i][j] = 0
+                    count -= 1
+                    
+    dfs(0)       
+    print(result)
+solution(example_1)
